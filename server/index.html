@@ -1,0 +1,48 @@
+<h1>Hello World!</h1>
+
+<div id = "p1"></div>
+<div id= "p2"></div>
+
+<button id="p1" onclick="connectPlayerOne()">Conect Player One</button>
+<button id="p2" onclick="connectPlayerTwo()">Conect Player Two</button>
+
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io.connect('http://localhost');
+
+  socket.on('news', function (data) {
+    console.log(data);
+    socket.emit('my other event', { my: 'data' });
+  });
+
+  socket.on('player one init', function(data)
+  {
+  	console.log(data);
+  	console.log("player one init");
+  	var div_p1 = document.getElementById('p1');
+  	div_p1.innerHTML = "Player One Connected";
+  });
+  socket.on('player two init', function(data)
+  {
+  	console.log(data);
+  	console.log("player two init");
+  	var div_p2 = document.getElementById('p2');
+  	div_p2.innerHTML = "Player Two Connected";
+  });
+
+  function connectPlayerOne()
+  {
+  	socket.emit('player one connected', 'true');
+  }
+  function connectPlayerTwo()
+  {
+  	socket.emit('player two connected', 'true');
+  }
+
+  socket.on('connected', function (data) {
+  	console.log("CONNECTED" + data);
+	});
+
+</script>
